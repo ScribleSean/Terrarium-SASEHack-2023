@@ -1,10 +1,17 @@
 import Link from "next/link";
 
-export default function OpportunityCard(props: { opportunity: Opportunity }) {
+export default function OpportunityCard(props: {
+  opportunity: Opportunity;
+  onClick?: (id: string) => void;
+}) {
   const { opportunity } = props;
 
   return (
-    <div className="card m-1" style={{ width: "20rem", cursor: "pointer" }}>
+    <div
+      className="card m-1"
+      style={{ width: "20rem", cursor: "pointer" }}
+      onClick={() => props.onClick?.(opportunity.id)}
+    >
       <img src={opportunity.imageUrl} className="card-img-top" alt="..." />
       <div className="card-body">
         <h5 className="card-title">{opportunity.name}</h5>
