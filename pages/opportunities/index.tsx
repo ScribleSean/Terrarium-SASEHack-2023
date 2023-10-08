@@ -11,6 +11,7 @@ export const getServerSideProps = (async (context) => {
   const opportunities = await prisma.opportunity.findMany({
     include: { organization: true },
     where: view ? { organizationId: userId?.user.id } : undefined,
+    orderBy: { date: "asc" },
   });
 
   // If no opportunities are found, return a 404
@@ -26,7 +27,7 @@ export const getServerSideProps = (async (context) => {
   };
 }) satisfies GetServerSideProps<{
   // Specify the return type and the type of the props object
-  opportunities: OpportunityQueryType;
+  opportunities: any;
 }>;
 
 export default function ({
