@@ -1,20 +1,38 @@
+import { Prisma, PrismaClient, opportunity, users } from "@prisma/client";
 import OpportunityCard from "../../components/OpportunityCard";
-import oppourtunities from "../../data/opportunities.json";
 import Link from "next/link";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 
-export default function Feed() {
+export const getServerSideProps = (async () => {
+  const client = new PrismaClient();
+
+  const opportunities = await client.opportunity.findMany({
+    include: { organization: true },
+  });
+
+  if (opportunities == null) {
+    return { notFound: true };
+  }
+
+  return {
+    props: {
+      opportunities,
+    },
+  };
+}) satisfies GetServerSideProps<{
+  opportunities: OpportunityQueryType;
+}>;
+
+export default function ({
+  opportunities,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <div>
       <h1 className="title">Let's find your next opportunity</h1>
       <div className="d-flex flex-row flex-wrap">
-        {oppourtunities.map((opportunity, index) => (
+        {opportunities.map((opportunity, index) => (
           <Link href={`/opportunities/${opportunity.id}`} key={index}>
-            <OpportunityCard
-              opportunity={{
-                imageUrl: `https://picsum.photos/seed/${index + 1}/200`,
-                ...opportunity,
-              }}
-            ></OpportunityCard>
+            <OpportunityCard opportunity={opportunity}></OpportunityCard>
           </Link>
         ))}
       </div>

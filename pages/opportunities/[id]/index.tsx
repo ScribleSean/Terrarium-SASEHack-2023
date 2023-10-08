@@ -1,21 +1,42 @@
 import { useRouter } from "next/router";
-import opportunities from "../../../data/opportunities.json";
+import { PrismaClient, opportunity } from "@prisma/client";
+import { GetServerSideProps } from "next";
 
-export default function Opportunity() {
-  const router = useRouter();
+export const getServerSideProps = (async (context) => {
+  const client = new PrismaClient();
 
-  const post: Opportunity = opportunities.find(
-    (opp) => opp.id === router.query.id
-  )! as any as Opportunity;
+  if (context.params?.id == null) {
+    return { notFound: true };
+  }
+
+  const opportunity = await client.opportunity.findFirst({
+    where: { id: context.params.id as string },
+  });
+
+  if (opportunity == null) {
+    return { notFound: true };
+  }
+
+  return {
+    props: {
+      opportunity,
+    },
+  };
+}) satisfies GetServerSideProps<{
+  opportunity: opportunity;
+}>;
+
+export default function Opportunity(props: { opportunity: opportunity }) {
+  const { opportunity } = props;
 
   return (
-    post != null && (
+    opportunity != null && (
       <div>
         {/* <img src={post.imageUrl}></img> */}
-        <h1>{post.name}</h1>
-        <p>{post.description}</p>
-        <p>Location: {post.location}</p>
-        <p>Date: {post.date}</p>
+        <h1>{opportunity.title}</h1>
+        <p>{opportunity.description}</p>
+        <p>Location: {opportunity.location}</p>
+        <p>Date: {opportunity.date}</p>
 
         <button className="btn btn-primary m-2">Register</button>
         <button className="btn btn-secondary">Save</button>
