@@ -20,7 +20,7 @@ export const config = {
       },
       async authorize(credentials) {
         if (!credentials) {
-          return Promise.resolve(null); // Return null if credentials are missing
+          return null; // Return null if credentials are missing
         }
         try {
           const client = await clientPromise;
@@ -38,27 +38,37 @@ export const config = {
           // Return the newly created user
           return {
             id: existingUser._id.toString(),
-            role: existingUser.role,
+            name: existingUser.name,
+            imageUrl: existingUser.imageUrl,
+            isOrg: existingUser.isOrg,
             email: credentials.email,
             password: credentials.password,
           };
         } catch (error) {
-          return Promise.resolve(null); // Something went wrong, return null
+          return null; // Something went wrong, return null
         }
       },
     }),
   ],
   callbacks: {
-    session({ session }) {
-      const sessionUser = session.user as any;
+    session({ session, token }) {
       return {
         ...session,
         user: {
-          email: sessionUser.email as string,
-          id: sessionUser.id as string,
-          role: sessionUser.role as string,
+          id: token.id as string,
+          name: token.name as string,
+          imageUrl: token.imageUrl as string,
+          email: token.email as string,
+          isOrg: token.isOrg as boolean,
         },
       };
+    },
+    jwt({ token, user }) {
+      if (user) {
+        token = { ...token, ...user };
+      }
+
+      return token;
     },
   },
 } satisfies NextAuthOptions;
