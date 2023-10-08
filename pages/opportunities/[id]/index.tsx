@@ -28,8 +28,8 @@ export const getServerSideProps = (async (context) => {
 
   if (session == null) return { notFound: true };
 
-  const user = await prisma.users.findFirst({
-    where: { email: session.user.id },
+  const user = await prisma.users.findUnique({
+    where: { id: session.user.id },
   });
 
   // Return all registered users for the opportunity
@@ -44,7 +44,7 @@ export const getServerSideProps = (async (context) => {
       registered:
         user?.registeredOpportunityIds?.includes(opportunity.id) ?? false,
       saved: user?.savedOpportunityIds?.includes(opportunity.id) ?? false,
-      isEventCreator: user?.email == opportunity.organizationId,
+      isEventCreator: user?.id == opportunity.organizationId,
       registeredUsers,
     },
   };
