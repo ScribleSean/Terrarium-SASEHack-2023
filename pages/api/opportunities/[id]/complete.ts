@@ -27,7 +27,7 @@ export default async function handler(
   // Mark all the users as attended the event
   for (const userId of userIds) {
     await prisma.opportunitiesOnUsers.updateMany({
-      where: { id: userId },
+      where: { userId, opportunityId },
       data: { isAttended: true },
     });
   }
