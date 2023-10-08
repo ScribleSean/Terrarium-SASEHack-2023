@@ -16,17 +16,20 @@ model users {
   imageUrl                 String
   registeredOpportunityIds String[]
   savedOpportunityIds      String[]
+  attendedOpportunityIds   String[]
   createdOpportunities     opportunity[] @relation("created")
 }
 
 model opportunity {
-  id             String  @id @default(auto()) @map("_id") @db.ObjectId
-  title          String
-  description    String
-  location       String
-  imageUrl       String
-  date           String
-  organizationId String  @db.ObjectId
-  ended          Boolean @default(false)
-  organization   users?  @relation("created", fields: [organizationId], references: [id])
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  title            String
+  description      String
+  location         String
+  imageUrl         String
+  date             String
+  organizationId   String   @db.ObjectId
+  attendedUsersIds String[]
+  ended            Boolean  @default(false)
+  hours            Int      @default(0)
+  organization     users?   @relation("created", fields: [organizationId], references: [id])
 }

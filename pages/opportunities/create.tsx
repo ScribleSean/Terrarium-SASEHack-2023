@@ -75,6 +75,7 @@ export default function () {
             className="form-control"
             id="image-input"
             name="image"
+            defaultValue={`https://picsum.photos/seed/${Math.random()}/200/200`}
           />
         </div>
         <div className="mb-3">
