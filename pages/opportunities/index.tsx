@@ -1,5 +1,4 @@
 import OpportunityCard from "../../components/OpportunityCard";
-import Link from "next/link";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import prisma from "../../lib/db";
 import { auth } from "../../lib/auth";
@@ -38,10 +37,8 @@ export default function ({
       <h1 className="title">Let's find your next opportunity</h1>
       {/* Create a grid of opportunities */}
       <div className="d-flex flex-row flex-wrap">
-        {opportunities.map((opportunity, index) => (
-          <Link href={`/opportunities/${opportunity.id}`} key={index}>
-            <OpportunityCard opportunity={opportunity}></OpportunityCard>
-          </Link>
+        {opportunities.map((opportunity) => (
+          <OpportunityCard opportunity={opportunity}></OpportunityCard>
         ))}
       </div>
     </div>
