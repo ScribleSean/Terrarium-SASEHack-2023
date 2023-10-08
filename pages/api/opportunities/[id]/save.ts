@@ -24,7 +24,7 @@ export default async function handler(
 
   // Update the user's registeredOpportunityIds
   await prisma.users.update({
-    where: { email: session!.user.id },
+    where: { id: session!.user.id },
     data: { savedOpportunityIds: { push: opportunityId } },
   });
 

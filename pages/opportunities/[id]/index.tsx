@@ -182,15 +182,17 @@ export default function Opportunity({
     opportunity != null && (
       <div>
         <div className="mb-3">
+          {/* Event Description */}
           <h1>{opportunity.title}</h1>
           <p>{opportunity.description}</p>
           <p>Location: {opportunity.location}</p>
           <p>Date: {opportunity.date}</p>
 
+          {/* Buttons */}
           {isEventCreator && (
             <>
               <button
-                className={"btn btn-primary"}
+                className={"btn btn-primary m-1"}
                 onClick={onComplete}
                 disabled={opportunity.ended}
               >
@@ -208,17 +210,18 @@ export default function Opportunity({
             </>
           )}
 
+          <button
+            className={"btn btn-secondary m-1"}
+            onClick={onSave}
+            disabled={saveState == null}
+          >
+            {saveText}
+          </button>
+
           {!isEventCreator && (
             <>
-              <button className={"btn btn-primary"} onClick={onRegister}>
+              <button className={"btn btn-primary m-1"} onClick={onRegister}>
                 {registerText}
-              </button>
-              <button
-                className={"btn btn-secondary m-1"}
-                onClick={onSave}
-                disabled={saveState == null}
-              >
-                {saveText}
               </button>
             </>
           )}
@@ -238,6 +241,7 @@ export default function Opportunity({
           </div>
         )}
 
+        {/* User List */}
         <div>
           <h2>{isInCompletionMode ? "Who's went?" : "Who's going?"}</h2>
           <div className="d-flex flex-col">

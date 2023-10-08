@@ -24,14 +24,14 @@ export default async function handler(
 
   // Get the user's registeredOpportunityIds
   const user = await prisma.users.findUnique({
-    where: { email: session!.user.id },
+    where: { id: session!.user.id },
   });
 
   if (!user) return res.status(400);
 
   // Update the user's registeredOpportunityIds
   await prisma.users.update({
-    where: { email: session!.user.id },
+    where: { id: session!.user.id },
     data: {
       savedOpportunityIds: {
         set: user.savedOpportunityIds.filter((id) => id !== opportunityId),
