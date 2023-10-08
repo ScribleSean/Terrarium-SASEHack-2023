@@ -4,20 +4,24 @@ import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import prisma from "../../lib/db";
 
 export const getServerSideProps = (async () => {
+  // Find all opportunities in MongoDB
   const opportunities = await prisma.opportunity.findMany({
     include: { organization: true },
   });
 
+  // If no opportunities are found, return a 404
   if (opportunities == null) {
     return { notFound: true };
   }
 
+  // Return the opportunities as props
   return {
     props: {
       opportunities,
     },
   };
 }) satisfies GetServerSideProps<{
+  // Specify the return type and the type of the props object
   opportunities: OpportunityQueryType;
 }>;
 
@@ -27,6 +31,7 @@ export default function ({
   return (
     <div>
       <h1 className="title">Let's find your next opportunity</h1>
+      {/* Create a grid of opportunities */}
       <div className="d-flex flex-row flex-wrap">
         {opportunities.map((opportunity, index) => (
           <Link href={`/opportunities/${opportunity.id}`} key={index}>

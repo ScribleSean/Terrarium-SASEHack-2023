@@ -47,6 +47,15 @@ export const config = {
       },
     }),
   ],
+  callbacks: {
+    session({ session }) {
+      const sessionUser = session.user as any;
+      return {
+        ...session,
+        user: { email: sessionUser.email, id: sessionUser.id },
+      };
+    },
+  },
 } satisfies NextAuthOptions;
 
 // Use it in server contexts

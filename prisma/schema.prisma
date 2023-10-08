@@ -8,11 +8,13 @@ datasource db {
 }
 
 model users {
-  id          String        @id @default(auto()) @map("_id") @db.ObjectId
-  email       String        @unique
-  name        String
-  password    String
-  opportunity opportunity[]
+  id                       String        @id @default(auto()) @map("_id") @db.ObjectId
+  email                    String        @unique
+  name                     String
+  password                 String
+  registeredOpportunityIds String[]
+  savedOpportunityIds      String[]
+  createdOpportunities     opportunity[] @relation("created")
 }
 
 model opportunity {
@@ -23,5 +25,5 @@ model opportunity {
   imageUrl       String
   date           String
   organizationId String
-  organization   users? @relation(fields: [organizationId], references: [email])
+  organization   users? @relation("created", fields: [organizationId], references: [email])
 }
