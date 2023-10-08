@@ -62,9 +62,6 @@ export default function Opportunity({
   registered: initialRegistered,
   saved: initialSaved,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const [registerState, setRegisterState] = useState<boolean | null>(
-    initialRegistered
-  );
   const [saveState, setSaveState] = useState<boolean | null>(initialSaved);
 
   /**
@@ -102,7 +99,13 @@ export default function Opportunity({
    * Toggles user registration for the opportunity.
    */
   const onRegister = async () => {
-    setOppState(registerState, setRegisterState, "register", "unregister");
+    if (initialRegistered) {
+      await fetch(`/api/opportunities/${opportunity.id}/unregister`);
+    } else {
+      await fetch(`/api/opportunities/${opportunity.id}/register`);
+    }
+
+    router.reload();
   };
 
   /**
@@ -128,9 +131,9 @@ export default function Opportunity({
   const saveText =
     saveState == null ? "Loading" : saveState ? "Unsave" : "Save";
   const registerText =
-    registerState == null
+    initialRegistered == null
       ? "Loading"
-      : registerState
+      : initialRegistered
       ? "Unregister"
       : "Register";
 
@@ -146,7 +149,7 @@ export default function Opportunity({
           <button
             className="btn btn-primary m-1"
             onClick={onRegister}
-            disabled={registerState == null}
+            disabled={initialRegistered == null}
           >
             {registerText}
           </button>
