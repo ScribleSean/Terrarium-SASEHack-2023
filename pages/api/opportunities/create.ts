@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { PrismaClient, opportunity } from "@prisma/client";
-import { getServerSession } from "next-auth/next";
+import { opportunity } from "@prisma/client";
 import { auth } from "../../../lib/auth";
+import prisma from "../../../lib/db";
 
 type ResponseData = opportunity;
 
@@ -10,11 +10,10 @@ export default async function handler(
   res: NextApiResponse<ResponseData>
 ) {
   const session = await auth(req, res);
-  const client = new PrismaClient();
 
   const { title, description, location, imageUrl, date } = JSON.parse(req.body);
 
-  const Opportunity = await client.opportunity.create({
+  const Opportunity = await prisma.opportunity.create({
     data: {
       title,
       description,

@@ -1,12 +1,10 @@
-import { Prisma, PrismaClient, opportunity, users } from "@prisma/client";
 import OpportunityCard from "../../components/OpportunityCard";
 import Link from "next/link";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import prisma from "../../lib/db";
 
 export const getServerSideProps = (async () => {
-  const client = new PrismaClient();
-
-  const opportunities = await client.opportunity.findMany({
+  const opportunities = await prisma.opportunity.findMany({
     include: { organization: true },
   });
 

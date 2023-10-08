@@ -1,15 +1,13 @@
-import { useRouter } from "next/router";
-import { PrismaClient, opportunity } from "@prisma/client";
+import { opportunity } from "@prisma/client";
 import { GetServerSideProps } from "next";
+import prisma from "../../../lib/db";
 
 export const getServerSideProps = (async (context) => {
-  const client = new PrismaClient();
-
   if (context.params?.id == null) {
     return { notFound: true };
   }
 
-  const opportunity = await client.opportunity.findFirst({
+  const opportunity = await prisma.opportunity.findFirst({
     where: { id: context.params.id as string },
   });
 

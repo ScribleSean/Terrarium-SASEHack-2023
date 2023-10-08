@@ -47,7 +47,6 @@ export const config = {
       },
     }),
   ],
-  session: {},
 } satisfies NextAuthOptions;
 
 // Use it in server contexts
