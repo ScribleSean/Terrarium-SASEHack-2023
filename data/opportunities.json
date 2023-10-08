@@ -5,7 +5,8 @@
     "name": "Park Cleanup",
     "description": "Join us for a park cleanup event to keep our community green and beautiful.",
     "organizationName": "Green Earth Volunteers",
-    "organizationId": "12345"
+    "organizationId": "12345",
+    "id": "1"
   },
   {
     "date": "Oct 15 2023",
@@ -13,7 +14,8 @@
     "name": "Food Drive",
     "description": "Help collect and distribute food to those in need in our local community.",
     "organizationName": "Community Food Bank",
-    "organizationId": "54321"
+    "organizationId": "54321",
+    "id": "2"
   },
   {
     "date": "Oct 20 2023",
@@ -21,7 +23,8 @@
     "name": "Senior Center Visit",
     "description": "Spend time with the elderly residents of our senior center, engage in activities, and bring joy to their day.",
     "organizationName": "Senior Care Alliance",
-    "organizationId": "98765"
+    "organizationId": "98765",
+    "id": "3"
   },
   {
     "date": "Oct 25 2023",
@@ -29,7 +32,8 @@
     "name": "Tree Planting",
     "description": "Help us plant trees and improve the environment in our city.",
     "organizationName": "Green Springfield Initiative",
-    "organizationId": "45678"
+    "organizationId": "45678",
+    "id": "4"
   },
   {
     "date": "Oct 30 2023",
@@ -37,7 +41,8 @@
     "name": "Youth Mentorship Program",
     "description": "Become a mentor and guide local youth toward a brighter future.",
     "organizationName": "Youth Empowerment Foundation",
-    "organizationId": "13579"
+    "organizationId": "13579",
+    "id": "5"
   },
   {
     "date": "Nov 5 2023",
@@ -45,7 +50,8 @@
     "name": "Homeless Shelter Support",
     "description": "Assist at a homeless shelter by serving meals and providing support to those in need.",
     "organizationName": "Hope Haven Shelter",
-    "organizationId": "24680"
+    "organizationId": "24680",
+    "id": "6"
   },
   {
     "date": "Nov 10 2023",
@@ -53,7 +59,8 @@
     "name": "Library Reading Program",
     "description": "Read books to children at the local library and promote a love for reading.",
     "organizationName": "Quincy Public Library",
-    "organizationId": "11223"
+    "organizationId": "11223",
+    "id": "7"
   },
   {
     "date": "Nov 15 2023",
@@ -61,7 +68,8 @@
     "name": "Community Garden Maintenance",
     "description": "Help maintain our community garden and ensure it remains a vibrant green space for everyone.",
     "organizationName": "Somerville Community Gardens",
-    "organizationId": "33445"
+    "organizationId": "33445",
+    "id": "8"
   },
   {
     "date": "Nov 20 2023",
@@ -69,7 +77,8 @@
     "name": "Veterans' Support",
     "description": "Show appreciation to our veterans by participating in a veterans' support event.",
     "organizationName": "Veterans Support Association",
-    "organizationId": "55667"
+    "organizationId": "55667",
+    "id": "9"
   },
   {
     "date": "Nov 25 2023",
@@ -77,7 +86,8 @@
     "name": "Thanksgiving Meal Drive",
     "description": "Distribute Thanksgiving meals to families in need and make their holiday special.",
     "organizationName": "Framingham Cares",
-    "organizationId": "77889"
+    "organizationId": "77889",
+    "id": "10"
   },
   {
     "date": "Nov 30 2023",
@@ -85,7 +95,8 @@
     "name": "Home Renovation Project",
     "description": "Assist in renovating homes for families in need, providing them with a safe and comfortable living space.",
     "organizationName": "Home Makeover Foundation",
-    "organizationId": "99000"
+    "organizationId": "99000",
+    "id": "11"
   },
   {
     "date": "Dec 5 2023",
@@ -93,7 +104,8 @@
     "name": "Holiday Toy Drive",
     "description": "Collect and distribute toys to underprivileged children during the holiday season.",
     "organizationName": "Salem Toy Drive",
-    "organizationId": "66778"
+    "organizationId": "66778",
+    "id": "12"
   },
   {
     "date": "Dec 10 2023",
@@ -101,7 +113,8 @@
     "name": "Elderly Care Visit",
     "description": "Visit and spend quality time with elderly residents at a local care facility.",
     "organizationName": "Malden Elderly Care Center",
-    "organizationId": "11234"
+    "organizationId": "11234",
+    "id": "13"
   },
   {
     "date": "Dec 15 2023",
@@ -109,7 +122,8 @@
     "name": "Clothing Drive",
     "description": "Collect and distribute warm clothing to those in need during the winter season.",
     "organizationName": "Warmth for All",
-    "organizationId": "77899"
+    "organizationId": "77899",
+    "id": "14"
   },
   {
     "date": "Dec 20 2023",
@@ -117,7 +131,8 @@
     "name": "Beach Cleanup",
     "description": "Help us clean up the local beach and protect our coastal environment.",
     "organizationName": "Plymouth Coastal Conservation",
-    "organizationId": "33555"
+    "organizationId": "33555",
+    "id": "15"
   },
   {
     "date": "Dec 25 2023",
@@ -125,6 +140,7 @@
     "name": "Holiday Food Distribution",
     "description": "Distribute holiday meals to families in need and spread joy during the festive season.",
     "organizationName": "Taunton Food Pantry",
-    "organizationId": "11222"
+    "organizationId": "11222",
+    "id": "16"
   }
 ]
