@@ -14,6 +14,7 @@ export default async function handler(
   if (!opportunityId) return res.status(404);
 
   const session = await auth(req, res);
+  const userId = session!.user.id;
 
   // Ensure that the opportunity exists
   const opportunity = await prisma.opportunity.findUnique({
@@ -22,11 +23,21 @@ export default async function handler(
 
   if (!opportunity) return res.status(404);
 
-  // Update the user's registeredOpportunityIds
-  await prisma.users.update({
-    where: { id: session!.user.id },
-    data: { registeredOpportunityIds: { push: opportunityId } },
+  // Update the user's opportunitiesOnUsers
+  const compositeId = opportunityId + userId;
+
+  await prisma.opportunitiesOnUsers.upsert({
+    where: { id: compositeId },
+    update: {
+      isRegistered: true,
+    },
+    create: {
+      id: compositeId,
+      opportunityId,
+      userId,
+      isRegistered: true,
+    },
   });
 
-  res.status(204).json(opportunity);
+  res.status(204).end();
 }

@@ -9,15 +9,16 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseData>
 ) {
-  const opportunityId = req.query.id;
+  const opportunityId = req.query.id as string | undefined;
 
   if (!opportunityId) return res.status(404);
 
   const session = await auth(req, res);
+  const userId = session!.user.id;
 
   // Ensure that the opportunity exists
   const opportunity = await prisma.opportunity.findUnique({
-    where: { id: opportunityId as string },
+    where: { id: opportunityId },
   });
 
   if (!opportunity) return res.status(404);
@@ -30,14 +31,20 @@ export default async function handler(
   if (!user) return res.status(400);
 
   // Update the user's registeredOpportunityIds
-  await prisma.users.update({
-    where: { id: session!.user.id },
-    data: {
-      savedOpportunityIds: {
-        set: user.savedOpportunityIds.filter((id) => id !== opportunityId),
-      },
+  const compositeId = opportunityId + userId;
+
+  await prisma.opportunitiesOnUsers.upsert({
+    where: { id: compositeId },
+    update: {
+      isSaved: false,
+    },
+    create: {
+      id: compositeId,
+      opportunityId,
+      userId,
+      isSaved: false,
     },
   });
 
-  res.status(204).json(opportunity);
+  res.status(204).end();
 }

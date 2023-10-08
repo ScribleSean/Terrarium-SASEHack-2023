@@ -8,28 +8,39 @@ datasource db {
 }
 
 model users {
-  id                       String        @id @default(auto()) @map("_id") @db.ObjectId
-  email                    String        @unique
-  name                     String
-  password                 String
-  isOrg                    Boolean       @default(false)
-  imageUrl                 String
-  registeredOpportunityIds String[]
-  savedOpportunityIds      String[]
-  attendedOpportunityIds   String[]
-  createdOpportunities     opportunity[] @relation("created")
+  id                   String                 @id @default(auto()) @map("_id") @db.ObjectId
+  email                String                 @unique
+  name                 String
+  password             String
+  isOrg                Boolean                @default(false)
+  imageUrl             String
+  createdOpportunities opportunity[]          @relation("created")
+  opportunitiesOnUsers opportunitiesOnUsers[]
 }
 
 model opportunity {
-  id               String   @id @default(auto()) @map("_id") @db.ObjectId
-  title            String
-  description      String
-  location         String
-  imageUrl         String
-  date             String
-  organizationId   String   @db.ObjectId
-  attendedUsersIds String[]
-  ended            Boolean  @default(false)
-  hours            Int      @default(0)
-  organization     users?   @relation("created", fields: [organizationId], references: [id])
+  id                   String                 @id @default(auto()) @map("_id") @db.ObjectId
+  title                String
+  description          String
+  location             String
+  imageUrl             String
+  date                 String
+  organizationId       String                 @db.ObjectId
+  ended                Boolean                @default(false)
+  hours                Int                    @default(0)
+  organization         users?                 @relation("created", fields: [organizationId], references: [id])
+  opportunitiesOnUsers opportunitiesOnUsers[]
+}
+
+model opportunitiesOnUsers {
+  id            String       @id @map("_id")
+  opportunityId String       @db.ObjectId
+  userId        String       @db.ObjectId
+  opportunity   opportunity? @relation(fields: [opportunityId], references: [id])
+  user          users?       @relation(fields: [userId], references: [id])
+  isRegistered  Boolean      @default(false)
+  isSaved       Boolean      @default(false)
+  isAttended    Boolean      @default(false)
+
+  @@map("opportunitiesonusers")
 }

@@ -9,9 +9,7 @@ export const getServerSideProps = (async (context) => {
   const { id } = context.params ?? {};
 
   // If the id is not specified, return a 404
-  if (id == null) {
-    return { notFound: true };
-  }
+  if (id == null) return { notFound: true };
 
   // Find the opportunity in MongoDB by its id
   const opportunity = await prisma.opportunity.findUnique({
@@ -19,32 +17,31 @@ export const getServerSideProps = (async (context) => {
   });
 
   // If the opportunity is not found, return a 404
-  if (opportunity == null) {
-    return { notFound: true };
-  }
+  if (opportunity == null) return { notFound: true };
 
   // Get the user's registered/saved state
   const session = await auth(context.req, context.res);
+  const userId = session?.user.id;
 
   if (session == null) return { notFound: true };
 
-  const user = await prisma.users.findUnique({
-    where: { id: session.user.id },
+  const userRegistrationStatus = await prisma.opportunitiesOnUsers.findUnique({
+    where: { id: opportunity.id + session.user.id },
   });
 
-  // Return all registered users for the opportunity
-  const registeredUsers = await prisma.users.findMany({
-    where: { registeredOpportunityIds: { has: opportunity.id } },
-    select: { name: true, imageUrl: true, id: true },
-  });
+  const registeredUsers = (
+    await prisma.opportunitiesOnUsers.findMany({
+      where: { opportunityId: opportunity.id, isRegistered: true },
+      select: { user: { select: { name: true, imageUrl: true, id: true } } },
+    })
+  ).map((join) => join.user!);
 
   return {
     props: {
       opportunity,
-      registered:
-        user?.registeredOpportunityIds?.includes(opportunity.id) ?? false,
-      saved: user?.savedOpportunityIds?.includes(opportunity.id) ?? false,
-      isEventCreator: user?.id == opportunity.organizationId,
+      registered: userRegistrationStatus?.isRegistered ?? false,
+      saved: userRegistrationStatus?.isSaved ?? false,
+      isEventCreator: userId == opportunity.organizationId,
       registeredUsers,
     },
   };
@@ -262,7 +259,9 @@ export default function Opportunity({
                   <input
                     type="radio"
                     className="m-2"
-                    checked={opportunity.attendedUsersIds.includes(user.id)}
+                    checked={
+                      registeredUsers.find((u) => u.id === user.id) != null
+                    }
                     disabled
                   ></input>
                 )}

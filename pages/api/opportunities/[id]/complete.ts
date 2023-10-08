@@ -1,5 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { opportunity } from "@prisma/client";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/db";
 
@@ -22,20 +21,21 @@ export default async function handler(
   });
 
   if (!opportunity) return res.status(404);
+  // Ensure that the user is the organization
   if (opportunity.organizationId != session?.user.id) return res.status(403);
 
-  // Add the event to every user's attendedOpportunityIds
+  // Mark all the users as attended the event
   for (const userId of userIds) {
-    await prisma.users.update({
+    await prisma.opportunitiesOnUsers.updateMany({
       where: { id: userId },
-      data: { attendedOpportunityIds: { push: opportunityId } },
+      data: { isAttended: true },
     });
   }
 
   // Update the opportunity's hours
   await prisma.opportunity.update({
     where: { id: opportunityId },
-    data: { hours, attendedUsersIds: { set: userIds }, ended: true },
+    data: { hours, ended: true },
   });
 
   res.status(204).end();

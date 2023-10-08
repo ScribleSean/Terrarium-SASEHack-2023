@@ -1,8 +1,91 @@
 import Head from "next/head";
+import { auth } from "../lib/auth";
+import prisma from "../lib/db";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { opportunity } from "@prisma/client";
 import OpportunityCard from "../components/OpportunityCard";
-import oppourtunities from "../data/opportunities.json";
 
-export default function Profile() {
+export const getServerSideProps = (async (context) => {
+  const session = await auth(context.req, context.res);
+  if (session == null) return { notFound: true };
+  const userId = session.user.id;
+
+  // Get all user opportunities
+  const opportunities = await prisma.opportunitiesOnUsers.findMany({
+    where: { userId },
+    include: { opportunity: { include: { organization: true } } },
+  });
+
+  const registeredOpportunities = opportunities
+    .filter(
+      (opportunity) => opportunity.isRegistered && !opportunity.isAttended
+    )
+    .map((opportunity) => opportunity.opportunity!);
+
+  const savedOpportunities = opportunities
+    .filter((opportunity) => opportunity.isSaved)
+    .map((opportunity) => opportunity.opportunity!);
+
+  const attendedOpportunities = opportunities
+    .filter((opportunity) => opportunity.isAttended)
+    .map((opportunity) => opportunity.opportunity!);
+
+  // Get hours contributed per organization
+  const hoursContributedPerOrganization = attendedOpportunities.reduce<{
+    [key: string]: number;
+  }>((a, b) => {
+    a[b.organizationId] = (a[b.organizationId] || 0) + b.hours;
+    return a;
+  }, {});
+
+  // Get total hours contributed
+  const hoursContributed = Object.values(
+    hoursContributedPerOrganization
+  ).reduce((a, b) => a + b, 0);
+
+  // Get top 3 organizations by hours
+  const topOrganizations = await prisma.users.findMany({
+    where: {
+      id: { in: Object.keys(hoursContributedPerOrganization).slice(0, 3) },
+    },
+    select: { name: true, imageUrl: true },
+  });
+
+  return {
+    props: {
+      hoursContributed,
+      topOrganizations,
+      numberOpportunitiesAttended: attendedOpportunities.length,
+      numberOrganizationsContributed: Object.keys(
+        hoursContributedPerOrganization
+      ).length,
+      savedOpportunities,
+      registeredOpportunities,
+      attendedOpportunities,
+      user: { name: session.user.name, imageUrl: session.user.imageUrl },
+    },
+  };
+}) satisfies GetServerSideProps<{
+  hoursContributed: number;
+  topOrganizations: { name: string; imageUrl: string }[];
+  numberOpportunitiesAttended: number;
+  numberOrganizationsContributed: number;
+  savedOpportunities: opportunity[];
+  attendedOpportunities: opportunity[];
+  registeredOpportunities: opportunity[];
+  user: { name: string; imageUrl: string };
+}>;
+
+export default function Profile({
+  user,
+  hoursContributed,
+  topOrganizations,
+  numberOpportunitiesAttended,
+  numberOrganizationsContributed,
+  attendedOpportunities,
+  registeredOpportunities,
+  savedOpportunities,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <div className="container1">
       <Head>
@@ -10,102 +93,58 @@ export default function Profile() {
       </Head>
 
       <main>
-        <h1 className="title">My Profile</h1>
+        <div className="d-flex align-items-center mb-5">
+          <img
+            className="rounded-circle mx-5"
+            width={200}
+            height={200}
+            src={user.imageUrl}
+          ></img>
+          <h1>{user.name}</h1>
+        </div>
 
-        <div className="container2">
-          <div className="name_opps">
-            {/* <img src={imageToAdd} alt="profile_picture" />; */}
-
-            <h2 className="heading2">Name</h2>
-
-            <p className="subtitle">Participated in _ opportunities</p>
+        <div className="d-flex border w-75" style={{ marginLeft: "auto" }}>
+          <div className="d-flex flex-column m-2">
+            <h2>{hoursContributed}</h2>
+            <span className="text-sm">Hours Contributed</span>
           </div>
-
-          <div className="interests">
-            <h3 className="heading3">Interests</h3>
-
-            <p>list interests here</p>
+          <div className="d-flex flex-column m-2">
+            <h2>{numberOpportunitiesAttended}</h2>
+            <span className="text-sm">Opportunities Attended</span>
+          </div>
+          <div className="d-flex">
+            {topOrganizations.map((organization) => (
+              <div className="d-flex flex-column m-2">
+                <img
+                  className="rounded-circle"
+                  width={50}
+                  height={50}
+                  src={organization.imageUrl}
+                ></img>
+              </div>
+            ))}
           </div>
         </div>
 
-        <div className="container3">
-          <h3>Saved Opportunities</h3>
-
-          <div className="cardContainer">
-            {/* {oppourtunities.slice(0, 3).map((opportunity, index) => (
-              <OpportunityCard
-                opportunity={{
-                  imageUrl: `https://picsum.photos/seed/${index + 1}/200`,
-                  ...opportunity,
-                }}
-              ></OpportunityCard>
-            ))} */}
-          </div>
-
-          <button type="button" className="saved_opps">
-            View all saved opportunities
-          </button>
+        <h1>Registered Opportunities</h1>
+        <div className="d-flex flex-wrap">
+          {registeredOpportunities.map((opportunity) => (
+            <OpportunityCard opportunity={opportunity} />
+          ))}
         </div>
-
-        <div className="container4">
-          <h3>My Posts</h3>
-
-          <button type="button" className="new_post">
-            Create new post
-          </button>
+        <h1>Saved Opportunities</h1>
+        <div className="d-flex flex-wrap">
+          {savedOpportunities.map((opportunity) => (
+            <OpportunityCard opportunity={opportunity} />
+          ))}
+        </div>
+        <h1>Completed Opportunities</h1>
+        <div className="d-flex flex-wrap">
+          {attendedOpportunities.map((opportunity) => (
+            <OpportunityCard opportunity={opportunity} />
+          ))}
         </div>
       </main>
-
-      <style jsx>{`
-        .cardContainer {
-          display: flex;
-          flex-direction: row;
-          flex-wrap: wrap;
-        }
-
-        .container1 {
-          margin: 10px;
-          min-height: 100vh;
-          justify-content: center;
-        }
-
-        main {
-          margin: 10px;
-        }
-
-        .container2 {
-          display: flex;
-          justify-content: start;
-          background-color: #e5c687;
-          border-radius: 10px;
-        }
-
-        .name_opps {
-          margin: 10px;
-          width: 400px;
-        }
-
-        .interests {
-          margin: 10px;
-          width: 400px;
-        }
-
-        .title {
-          width: 100vw;
-          min-height: 1vh;
-          align-items: left;
-        }
-
-        .saved_opps {
-          border-radius: 6px;
-          background-color: #09814a;
-        }
-
-        .new_post {
-          border-radius: 6px;
-          background-color: #09814a;
-        }
-      `}</style>
     </div>
   );
 }
