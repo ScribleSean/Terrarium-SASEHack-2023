@@ -2,8 +2,9 @@ import Link from "next/link";
 
 export default function OpportunityCard(props: {
   opportunity: OpportunityQueryType;
+  showContributed?: boolean;
 }) {
-  const { opportunity } = props;
+  const { opportunity, showContributed } = props;
 
   return (
     <Link href={`/opportunities/${opportunity.id}`} key={opportunity.id}>
@@ -14,6 +15,11 @@ export default function OpportunityCard(props: {
           <p className="card-text m-0">📅 {opportunity.date}</p>
           <p className="card-text m-0">📍 {opportunity.location}</p>
           <p className="card-text m-0">🫂 {opportunity.organization.name}</p>
+          {showContributed != null && (
+            <p className="card-text m-0">
+              🕒 {opportunity.hours} hours contributed
+            </p>
+          )}
         </div>
       </div>
     </Link>

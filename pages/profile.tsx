@@ -141,7 +141,7 @@ export default function Profile({
         <h1>Completed Opportunities</h1>
         <div className="d-flex flex-wrap">
           {attendedOpportunities.map((opportunity) => (
-            <OpportunityCard opportunity={opportunity} />
+            <OpportunityCard opportunity={opportunity} showContributed />
           ))}
         </div>
       </main>
