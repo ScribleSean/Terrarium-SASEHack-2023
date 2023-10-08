@@ -14,6 +14,7 @@ export default function () {
         location: formData.get("location")?.toString(),
         date: formData.get("date")?.toString(),
         imageUrl: formData.get("image")?.toString(),
+        tagNames: Array.from(formData.getAll("tags") ?? []),
       }),
     });
 
@@ -49,6 +50,7 @@ export default function () {
             className="form-control"
             id="description-input"
             name="description"
+            required
           />
           <div className="form-text">
             Ideally you should include: What to expect, what to bring, how to
@@ -64,11 +66,12 @@ export default function () {
             className="form-control"
             id="location-input"
             name="location"
+            required
           />
         </div>
         <div className="mb-3">
           <label htmlFor="image-input" className="form-label">
-            ImageUrl
+            Cover Image URL
           </label>
           <input
             type="text"
@@ -76,6 +79,7 @@ export default function () {
             id="image-input"
             name="image"
             defaultValue={`https://picsum.photos/seed/${Math.random()}/200/200`}
+            required
           />
         </div>
         <div className="mb-3">
@@ -87,7 +91,29 @@ export default function () {
             data-provide="datepicker"
             id="date-input"
             name="date"
+            required
           />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="tag-select" className="form-label">
+            Tags
+          </label>
+          <select
+            className="select form-control"
+            name="tags"
+            id="tag-select"
+            multiple
+            required
+          >
+            <option value="Green">Green</option>
+            <option value="Solar">Solar</option>
+            <option value="Animals">Animals</option>
+            <option value="Environment">Environment</option>
+            <option value="Education">Education</option>
+            <option value="Children">Children</option>
+            <option value="Health">Health</option>
+            <option value="Food">Food</option>
+          </select>
         </div>
         <button type="submit" className="btn btn-primary">
           Submit

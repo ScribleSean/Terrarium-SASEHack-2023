@@ -11,7 +11,9 @@ export default async function handler(
 ) {
   const session = await auth(req, res);
 
-  const { title, description, location, imageUrl, date } = JSON.parse(req.body);
+  const { title, description, location, imageUrl, date, tagNames } = JSON.parse(
+    req.body
+  );
 
   const Opportunity = await prisma.opportunity.create({
     data: {
@@ -21,6 +23,7 @@ export default async function handler(
       imageUrl,
       date,
       organizationId: session?.user.id,
+      tagNames,
     },
   });
 
