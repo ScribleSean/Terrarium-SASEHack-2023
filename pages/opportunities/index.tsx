@@ -26,7 +26,7 @@ export const getServerSideProps = (async (context) => {
   };
 }) satisfies GetServerSideProps<{
   // Specify the return type and the type of the props object
-  opportunities: OpportunityQueryType;
+  opportunities: any;
 }>;
 
 export default function ({

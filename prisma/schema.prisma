@@ -30,6 +30,7 @@ model opportunity {
   hours                Int                    @default(0)
   organization         users?                 @relation("created", fields: [organizationId], references: [id])
   opportunitiesOnUsers opportunitiesOnUsers[]
+  tagNames             String[]
 }
 
 model opportunitiesOnUsers {
