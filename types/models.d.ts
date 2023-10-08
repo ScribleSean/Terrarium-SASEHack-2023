@@ -8,3 +8,10 @@ interface Opportunity {
   organizationId: string;
   organizationName: string;
 }
+
+interface User {
+  name: string;
+  email: string;
+  imageUrl: string;
+  role: "user" | "org" | "admin";
+}

@@ -4,13 +4,21 @@ import styles from "./navbar.module.css";
 export default function Navbar() {
   return (
     <div className={styles.container}>
-      <img className={styles.logo} src="/logo.png"></img>
-      <Link className={styles.link} href="/feed">
-        Feed
-      </Link>
-      <Link className={styles.link} href="/opportunities">
-        Opportunities
-      </Link>
+      <div className={styles.row}>
+        <img className={styles.logo} src="/logo.png"></img>
+        <span>Terrarium</span>
+      </div>
+      <div className={styles.row}>
+        <Link className={styles.link} href="/feed">
+          Feed
+        </Link>
+        <Link className={styles.link} href="/opportunities">
+          Opportunities
+        </Link>
+        <Link className={styles.link} href="/events">
+          My Events
+        </Link>
+      </div>
     </div>
   );
 }
