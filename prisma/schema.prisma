@@ -12,7 +12,7 @@ model users {
   email                    String        @unique
   name                     String
   password                 String
-  role                     String
+  isOrg                    Boolean       @default(false)
   imageUrl                 String
   registeredOpportunityIds String[]
   savedOpportunityIds      String[]
