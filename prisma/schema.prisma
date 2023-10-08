@@ -18,12 +18,13 @@ model users {
 }
 
 model opportunity {
-  id             String @id @default(auto()) @map("_id") @db.ObjectId
+  id             String  @id @default(auto()) @map("_id") @db.ObjectId
   title          String
   description    String
   location       String
   imageUrl       String
   date           String
   organizationId String
-  organization   users? @relation("created", fields: [organizationId], references: [email])
+  ended          Boolean
+  organization   users?  @relation("created", fields: [organizationId], references: [email])
 }

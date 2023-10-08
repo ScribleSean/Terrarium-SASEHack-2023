@@ -6,14 +6,16 @@ import { auth } from "../../../lib/auth";
 import { useRouter } from "next/router";
 
 export const getServerSideProps = (async (context) => {
+  const { id } = context.params ?? {};
+
   // If the id is not specified, return a 404
-  if (context.params?.id == null) {
+  if (id == null) {
     return { notFound: true };
   }
 
   // Find the opportunity in MongoDB by its id
   const opportunity = await prisma.opportunity.findUnique({
-    where: { id: context.params.id as string },
+    where: { id: id as string },
   });
 
   // If the opportunity is not found, return a 404

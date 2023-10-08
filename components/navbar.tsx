@@ -15,9 +15,6 @@ export default function Navbar() {
         <Link className={styles.link} href="/opportunities">
           Opportunities
         </Link>
-        <Link className={styles.link} href="/events">
-          My Events
-        </Link>
       </div>
     </div>
   );
