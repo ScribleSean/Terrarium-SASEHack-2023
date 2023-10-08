@@ -1,3 +1,31 @@
+.link {
+  position: relative;
+  text-decoration: none;
+  padding: 0;
+  margin: 0;
+
+}
+
+.link::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 4px;
+  border-radius: 4px;
+  background-color: #18272F;
+  bottom: 0;
+  left: 0;
+  transform-origin: right;
+  transform: scaleX(0);
+  transition: transform .3s ease-in-out;
+}
+
+.link:hover::before {
+  transform-origin: left;
+  transform: scaleX(1);
+}
+
+
 .container {
   display: flex;
   flex-direction: row;
@@ -20,6 +48,36 @@
 }
 
 .logo {
-  width: 20px;
+  width: 50px;
   margin-right: 1rem;
+}
+
+.link {
+  position: relative;
+}
+
+.link::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 4px;
+  border-radius: 4px;
+  background-color: #18272F;
+  bottom: 0;
+  left: 0;
+  transform-origin: right;
+  transform: scaleX(0);
+  transition: transform .3s ease-in-out;
+}
+
+.link:hover::before {
+  transform-origin: left;
+  transform: scaleX(1);
+}
+
+
+.center-text {
+  display: flex;
+  align-items: center;
+  margin-left: 1px;
 }

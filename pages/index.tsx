@@ -1,6 +1,7 @@
 import Head from "next/head";
 import clientPromise from "../lib/mongodb";
 import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
+import Image from "next/image";
 
 type ConnectionStatus = {
   isConnected: boolean;
@@ -37,17 +38,24 @@ export default function Home({
   return (
     <div className="container">
       <Head>
-        <title>Create Next App</title>
+        <title>Terrarium</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main>
-        <h1 className="title">
-          Welcome to <a href="https://nextjs.org">Next.js with MongoDB!</a>
-        </h1>
+        <Image
+          src="/logo.png"
+          width={250}
+          height={250}
+          className="img-fluid"
+          alt="Responsive image"
+        />
+        <h1 className="title">Welcome to Terrarium!</h1>
 
         {isConnected ? (
-          <h2 className="subtitle">You are connected to MongoDB</h2>
+          <h2 className="subtitle">
+            Are you an Organization or an Individual?
+          </h2>
         ) : (
           <h2 className="subtitle">
             You are NOT connected to MongoDB. Check the <code>README.md</code>{" "}
@@ -56,21 +64,27 @@ export default function Home({
         )}
 
         <p className="description">
-          Get started by editing <code>pages/index.js</code>
+          Existing user with Terrarium? <a href="/login">Click here to login</a>
         </p>
 
         <div className="grid">
-          <a href="https://nextjs.org/docs" className="card">
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
+          <a href="/api/auth/signin?callbackUrl=%2F" className="card">
+            <h3>Organization &rarr;</h3>
+            <p>
+              Click here to sign up and learn what you get from being an
+              Organization on Terrarium
+            </p>
           </a>
 
-          <a href="https://nextjs.org/learn" className="card">
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
+          <a href="/api/auth/signin?callbackUrl=%2F" className="card">
+            <h3>Individual &rarr;</h3>
+            <p>
+              Click here to sign up and find opportunities tailored to your
+              passions
+            </p>
           </a>
 
-          <a
+          {/* <a
             href="https://github.com/vercel/next.js/tree/canary/examples"
             className="card"
           >
@@ -88,11 +102,10 @@ export default function Home({
             <p>
               Instantly deploy your Next.js site to a public URL with Vercel.
             </p>
-          </a>
+          </a> */}
         </div>
       </main>
-
-      <footer>
+      {/* <footer>
         <a
           href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
           target="_blank"
@@ -101,12 +114,12 @@ export default function Home({
           Powered by{" "}
           <img src="/vercel.svg" alt="Vercel Logo" className="logo" />
         </a>
-      </footer>
+      </footer> */}
 
       <style jsx>{`
         .container {
           min-height: 100vh;
-          padding: 0 0.5rem;
+          padding: 0 0rem;
           display: flex;
           flex-direction: column;
           justify-content: center;
@@ -114,7 +127,7 @@ export default function Home({
         }
 
         main {
-          padding: 5rem 0;
+          padding: 0rem 0;
           flex: 1;
           display: flex;
           flex-direction: column;
@@ -201,7 +214,7 @@ export default function Home({
           flex-basis: 45%;
           padding: 1.5rem;
           text-align: left;
-          color: inherit;
+          color: #2381098;
           text-decoration: none;
           border: 1px solid #eaeaea;
           border-radius: 10px;
@@ -211,8 +224,8 @@ export default function Home({
         .card:hover,
         .card:focus,
         .card:active {
-          color: #0070f3;
-          border-color: #0070f3;
+          color: #52b788;
+          border-color: #2d6a4f;
         }
 
         .card h3 {
@@ -227,7 +240,7 @@ export default function Home({
         }
 
         .logo {
-          height: 1em;
+          height: 0rem;
         }
 
         @media (max-width: 600px) {

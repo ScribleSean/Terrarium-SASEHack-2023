@@ -9,8 +9,10 @@ export default function Navbar() {
   return (
     <div className={styles.container}>
       <div className={styles.row}>
-        <img className={styles.logo} src="/logo.png"></img>
-        <span>Terrarium</span>
+        <a href="/">
+          <img className={styles.logo} src="/logo.png"></img>
+        </a>
+        <span className={styles["center-text"]}>Terrarium</span>
       </div>
       <div className={styles.row}>
         <Link className={styles.link} href="/feed">
