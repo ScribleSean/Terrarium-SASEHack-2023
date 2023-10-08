@@ -20,7 +20,7 @@ export default async function handler(
       location,
       imageUrl,
       date,
-      organizationId: session?.user.email,
+      organizationId: session?.user.id,
     },
   });
 

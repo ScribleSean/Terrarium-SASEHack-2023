@@ -21,7 +21,7 @@ export default async function handler(
   });
 
   if (!opportunity) return res.status(404);
-  if (opportunity.organizationId != session?.user.email) return res.status(403);
+  if (opportunity.organizationId != session?.user.id) return res.status(403);
 
   // Update the user's registeredOpportunityIds
   await prisma.opportunity.delete({ where: { id: opportunityId } });

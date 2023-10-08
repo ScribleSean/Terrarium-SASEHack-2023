@@ -11,7 +11,7 @@ export const getServerSideProps = (async (context) => {
   // Find all opportunities in MongoDB
   const opportunities = await prisma.opportunity.findMany({
     include: { organization: true },
-    where: view ? { organizationId: userId?.user.email } : undefined,
+    where: view ? { organizationId: userId?.user.id } : undefined,
   });
 
   // If no opportunities are found, return a 404

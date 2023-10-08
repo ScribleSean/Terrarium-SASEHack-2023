@@ -32,14 +32,14 @@ export default function Profile() {
           <h3>Saved Opportunities</h3>
 
           <div className="cardContainer">
-            {oppourtunities.slice(0, 3).map((opportunity, index) => (
+            {/* {oppourtunities.slice(0, 3).map((opportunity, index) => (
               <OpportunityCard
                 opportunity={{
                   imageUrl: `https://picsum.photos/seed/${index + 1}/200`,
                   ...opportunity,
                 }}
               ></OpportunityCard>
-            ))}
+            ))} */}
           </div>
 
           <button type="button" className="saved_opps">

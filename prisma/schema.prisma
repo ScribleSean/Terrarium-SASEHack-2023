@@ -26,7 +26,7 @@ model opportunity {
   location       String
   imageUrl       String
   date           String
-  organizationId String
+  organizationId String  @db.ObjectId
   ended          Boolean @default(false)
-  organization   users?  @relation("created", fields: [organizationId], references: [email])
+  organization   users?  @relation("created", fields: [organizationId], references: [id])
 }

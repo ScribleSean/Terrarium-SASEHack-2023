@@ -29,7 +29,7 @@ export const getServerSideProps = (async (context) => {
   if (session == null) return { notFound: true };
 
   const user = await prisma.users.findFirst({
-    where: { email: session.user.email },
+    where: { email: session.user.id },
   });
 
   // Return all registered users for the opportunity
