@@ -38,6 +38,7 @@ export const config = {
           // Return the newly created user
           return {
             id: existingUser._id.toString(),
+            role: existingUser.role,
             email: credentials.email,
             password: credentials.password,
           };
@@ -52,7 +53,11 @@ export const config = {
       const sessionUser = session.user as any;
       return {
         ...session,
-        user: { email: sessionUser.email, id: sessionUser.id },
+        user: {
+          email: sessionUser.email as string,
+          id: sessionUser.id as string,
+          role: sessionUser.role as string,
+        },
       };
     },
   },

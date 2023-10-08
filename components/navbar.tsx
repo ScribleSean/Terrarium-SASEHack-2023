@@ -1,7 +1,11 @@
 import Link from "next/link";
 import styles from "./navbar.module.css";
+import { useSession } from "next-auth/react";
 
 export default function Navbar() {
+  const session = useSession();
+  const isOrg = session.data?.user.role == "org";
+
   return (
     <div className={styles.container}>
       <div className={styles.row}>
@@ -15,7 +19,10 @@ export default function Navbar() {
         <Link className={styles.link} href="/opportunities">
           Opportunities
         </Link>
-        <Link className={styles.link} href="/opportunities/create">
+        <Link
+          className={`${styles.link} ${isOrg ? "" : "d-none"}`}
+          href="/opportunities/create"
+        >
           Create
         </Link>
       </div>
