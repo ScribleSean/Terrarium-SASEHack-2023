@@ -19,6 +19,7 @@ export default function () {
 
     if (response.ok) {
       alert("Opportunity created!");
+      window.location.href = "/opportunities";
     } else {
       alert("Failed to create opportunity");
     }

@@ -15,6 +15,9 @@ export default function Navbar() {
         <Link className={styles.link} href="/opportunities">
           Opportunities
         </Link>
+        <Link className={styles.link} href="/opportunities/create">
+          Create
+        </Link>
       </div>
     </div>
   );
