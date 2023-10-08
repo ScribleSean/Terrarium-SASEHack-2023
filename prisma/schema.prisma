@@ -12,6 +12,8 @@ model users {
   email                    String        @unique
   name                     String
   password                 String
+  role                     String
+  imageUrl                 String
   registeredOpportunityIds String[]
   savedOpportunityIds      String[]
   createdOpportunities     opportunity[] @relation("created")
@@ -25,6 +27,6 @@ model opportunity {
   imageUrl       String
   date           String
   organizationId String
-  ended          Boolean
+  ended          Boolean @default(false)
   organization   users?  @relation("created", fields: [organizationId], references: [email])
 }

@@ -32,6 +32,12 @@ export const getServerSideProps = (async (context) => {
     where: { email: session.user.email },
   });
 
+  // Return all registered users for the opportunity
+  const registeredUsers = await prisma.users.findMany({
+    where: { registeredOpportunityIds: { has: opportunity.id } },
+    select: { name: true, imageUrl: true, id: true },
+  });
+
   return {
     props: {
       opportunity,
@@ -39,23 +45,27 @@ export const getServerSideProps = (async (context) => {
         user?.registeredOpportunityIds?.includes(opportunity.id) ?? false,
       saved: user?.savedOpportunityIds?.includes(opportunity.id) ?? false,
       isEventCreator: user?.email == opportunity.organizationId,
+      registeredUsers,
     },
   };
 }) satisfies GetServerSideProps<{
   opportunity: opportunity;
   registered: boolean;
   saved: boolean;
+  registeredUsers: { name: string; imageUrl: string; id: string }[];
 }>;
 
-export default function Opportunity(
-  props: InferGetServerSidePropsType<typeof getServerSideProps>
-) {
-  const { opportunity, isEventCreator } = props;
-
+export default function Opportunity({
+  opportunity,
+  isEventCreator,
+  registeredUsers,
+  registered: initialRegistered,
+  saved: initialSaved,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [registerState, setRegisterState] = useState<boolean | null>(
-    props.registered
+    initialRegistered
   );
-  const [saveState, setSaveState] = useState<boolean | null>(props.saved);
+  const [saveState, setSaveState] = useState<boolean | null>(initialSaved);
 
   /**
    * Updates the state of `currentValue` using `setOppState` and if
@@ -127,32 +137,52 @@ export default function Opportunity(
   return (
     opportunity != null && (
       <div>
-        {/* <img src={post.imageUrl}></img> */}
-        <h1>{opportunity.title}</h1>
-        <p>{opportunity.description}</p>
-        <p>Location: {opportunity.location}</p>
-        <p>Date: {opportunity.date}</p>
+        <div className="mb-5">
+          <h1>{opportunity.title}</h1>
+          <p>{opportunity.description}</p>
+          <p>Location: {opportunity.location}</p>
+          <p>Date: {opportunity.date}</p>
 
-        <button
-          className="btn btn-primary m-1"
-          onClick={onRegister}
-          disabled={registerState == null}
-        >
-          {registerText}
-        </button>
-        <button
-          className="btn btn-secondary m-1"
-          onClick={onSave}
-          disabled={saveState == null}
-        >
-          {saveText}
-        </button>
-        <button
-          className={`btn btn-danger m-1 ${isEventCreator ? "" : "d-none"}`}
-          onClick={onDelete}
-        >
-          Delete
-        </button>
+          <button
+            className="btn btn-primary m-1"
+            onClick={onRegister}
+            disabled={registerState == null}
+          >
+            {registerText}
+          </button>
+          <button
+            className="btn btn-secondary m-1"
+            onClick={onSave}
+            disabled={saveState == null}
+          >
+            {saveText}
+          </button>
+          <button
+            className={`btn btn-danger m-1 ${isEventCreator ? "" : "d-none"}`}
+            onClick={onDelete}
+          >
+            Delete
+          </button>
+        </div>
+
+        <div>
+          <h2>Who's going?</h2>
+          <div className="d-flex flex-col">
+            {registeredUsers.map((user) => (
+              <div
+                key={user.id}
+                className="d-flex justify-content-between align-items-center"
+              >
+                <img
+                  src={user.imageUrl}
+                  style={{ width: "50px", height: "50px" }}
+                  className="rounded-circle bg-info"
+                />
+                <span className="m-2">{user.name}</span>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     )
   );
