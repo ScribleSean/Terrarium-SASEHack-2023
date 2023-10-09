@@ -6,8 +6,8 @@ import type {
 import type { NextAuthOptions } from "next-auth";
 import { getServerSession } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import clientPromise from "./mongodb";
-
+import prisma from "./db";
+import bcrypt from "bcrypt";
 // You'll need to import and pass this
 // to `NextAuth` in `app/api/auth/[...nextauth]/route.ts`
 export const config = {
@@ -22,22 +22,23 @@ export const config = {
         if (!credentials) {
           return null; // Return null if credentials are missing
         }
-        try {
-          const client = await clientPromise;
-          const usersCollection = client.db().collection("users");
 
+        try {
           // Check if a user with the provided username already exists
-          const existingUser = await usersCollection.findOne({
-            email: credentials.email,
+          const existingUser = await prisma.users.findUnique({
+            where: { email: credentials.email },
           });
 
-          if (!existingUser || existingUser.password !== credentials.password) {
+          if (
+            !existingUser ||
+            !(await bcrypt.compare(credentials.password, existingUser.password))
+          ) {
             return null;
           }
 
           // Return the newly created user
           return {
-            id: existingUser._id.toString(),
+            id: existingUser.id,
             name: existingUser.name,
             imageUrl: existingUser.imageUrl,
             isOrg: existingUser.isOrg,
