@@ -36,6 +36,13 @@ export const getServerSideProps = (async (context) => {
     })
   ).map((join) => join.user!);
 
+  const attendedUsers = (
+    await prisma.opportunitiesOnUsers.findMany({
+      where: { opportunityId: opportunity.id, isAttended: true },
+      select: { user: { select: { name: true, imageUrl: true, id: true } } },
+    })
+  ).map((join) => join.user!);
+
   return {
     props: {
       opportunity,
@@ -43,6 +50,7 @@ export const getServerSideProps = (async (context) => {
       saved: userRegistrationStatus?.isSaved ?? false,
       isEventCreator: userId == opportunity.organizationId,
       registeredUsers,
+      attendedUsers,
     },
   };
 }) satisfies GetServerSideProps<{
@@ -50,12 +58,14 @@ export const getServerSideProps = (async (context) => {
   registered: boolean;
   saved: boolean;
   registeredUsers: { name: string; imageUrl: string; id: string }[];
+  attendedUsers: { name: string; imageUrl: string; id: string }[];
 }>;
 
 export default function Opportunity({
   opportunity,
   isEventCreator,
   registeredUsers,
+  attendedUsers,
   registered: initialRegistered,
   saved: initialSaved,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
@@ -260,7 +270,7 @@ export default function Opportunity({
                     type="radio"
                     className="m-2"
                     checked={
-                      registeredUsers.find((u) => u.id === user.id) != null
+                      attendedUsers.find((u) => u.id === user.id) != null
                     }
                     disabled
                   ></input>
