@@ -51,6 +51,14 @@ export const getServerSideProps = (async (context) => {
     select: { name: true, imageUrl: true },
   });
 
+  // Get user
+  const user = await prisma.users.findUnique({
+    where: { id: userId },
+    select: { name: true, imageUrl: true, badges: true },
+  });
+
+  if (!user) return { notFound: true };
+
   return {
     props: {
       hoursContributed,
@@ -62,7 +70,11 @@ export const getServerSideProps = (async (context) => {
       savedOpportunities,
       registeredOpportunities,
       attendedOpportunities,
-      user: { name: session.user.name, imageUrl: session.user.imageUrl },
+      user: {
+        name: user.name,
+        imageUrl: user.imageUrl,
+        badges: user.badges,
+      },
     },
   };
 }) satisfies GetServerSideProps<{
@@ -73,7 +85,7 @@ export const getServerSideProps = (async (context) => {
   savedOpportunities: opportunity[];
   attendedOpportunities: opportunity[];
   registeredOpportunities: opportunity[];
-  user: { name: string; imageUrl: string };
+  user: { name: string; imageUrl: string; badges: string[] };
 }>;
 
 export default function Profile({
@@ -81,7 +93,6 @@ export default function Profile({
   hoursContributed,
   topOrganizations,
   numberOpportunitiesAttended,
-  numberOrganizationsContributed,
   attendedOpportunities,
   registeredOpportunities,
   savedOpportunities,
@@ -103,7 +114,10 @@ export default function Profile({
           <h1>{user.name}</h1>
         </div>
 
-        <div className="d-flex border w-75" style={{ marginLeft: "auto" }}>
+        <div
+          className="d-flex border w-75 align-items-center"
+          style={{ marginLeft: "auto" }}
+        >
           <div className="d-flex flex-column m-2">
             <h2>{hoursContributed}</h2>
             <span className="text-sm">Hours Contributed</span>
@@ -113,13 +127,16 @@ export default function Profile({
             <span className="text-sm">Opportunities Attended</span>
           </div>
           <div className="d-flex">
-            {topOrganizations.map((organization) => (
+            {user.badges.map((badgeName) => (
               <div className="d-flex flex-column m-2">
                 <img
                   className="rounded-circle"
                   width={50}
                   height={50}
-                  src={organization.imageUrl}
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="top"
+                  title="Awarded based on past contributions"
+                  src={`badges/${badgeName}.svg`}
                 ></img>
               </div>
             ))}
