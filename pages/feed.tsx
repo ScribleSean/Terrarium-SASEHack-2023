@@ -2,7 +2,7 @@ import { opportunity } from "@prisma/client";
 import { GetServerSideProps } from "next";
 import prisma from "../lib/db";
 
-function Feed() {
+function feed() {
   return (
     <div>
       <h1 className="title">Feed</h1>
@@ -14,4 +14,4 @@ function Feed() {
     </div>
   );
 }
-export default Feed;
+export default feed;
