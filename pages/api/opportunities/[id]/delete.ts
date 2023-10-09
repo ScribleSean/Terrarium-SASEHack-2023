@@ -25,6 +25,7 @@ export default async function handler(
 
   // Update the user's registeredOpportunityIds
   await prisma.opportunitiesOnUsers.deleteMany({ where: { opportunityId } });
+  await prisma.opportunity.delete({ where: { id: opportunityId } });
 
   res.status(204).end();
 }
