@@ -10,7 +10,7 @@ export default function Navbar() {
     <div className={styles.container}>
       <div className={styles.row}>
         <a href="/">
-          <img className={styles.logo} src="/logo.png"></img>
+          <img className={styles.logo} src="/logonotext.png"></img>
         </a>
         <span className={styles["center-text"]}>Terrarium</span>
       </div>
