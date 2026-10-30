@@ -2,6 +2,8 @@
 
 ![Terrarium Logo](/public/logo.png)
 
+A web app that connects non-profits with volunteers, built by a team at SASEHack 2023.
+
 ## Inspiration
 
 As members of SASE, we are passionate about volunteer work as it is one of the five pillars. Over the past 5 past years, there has been a 29% decrease in the private sector and an increase in the demand for environmental volunteers. Knowing this, we saw an opportunity for a network of nonprofits and volunteers to capitalize on the needs in this industry. For individuals, finding community service opportunities can be a struggle, knowing that they want to contribute but not knowing where to start. For nonprofits, there is a lack of conversion and retention for volunteers to continue to participate. This is an area where we thought we could create an app to best help the two parties, providing incentives for individuals and nonprofits to keep providing to the communities.
@@ -53,3 +55,41 @@ This was the first ever hackathon any of us had ever taken part in. We sought to
 AI will be introduced in producing analysis for organizations so that they can better understand their volunteer demographics in order to have a greater conversion rate. Additionally, AI can be used to personalize opportunities for the users to allow them to engage in service activities more.
 
 We will further incentivise users by adding more statistics and awards to their profiles and adding global leaderboard functionality. We will create a more social experience for all users of Terrarium by adding a global feed to enable posting, friending, and sharing so that users can engage with each other and foster a local community.
+
+## Run locally
+
+Requirements: Node.js 18 or later and a MongoDB database that runs as a replica set (Prisma needs one; a free MongoDB Atlas cluster works).
+
+1. Install dependencies:
+
+   ```sh
+   npm install
+   ```
+
+2. Create `.env` in the project root (it is gitignored). The values below are placeholders:
+
+   ```text
+   DATABASE_URL=<mongodb-connection-string>
+   NEXTAUTH_SECRET=<random-string>
+   NEXTAUTH_URL=http://localhost:3000
+   ```
+
+   `DATABASE_URL` is read by Prisma. `NEXTAUTH_SECRET` signs session tokens; generate one with `openssl rand -base64 32`.
+
+3. Generate the Prisma client and create the collections:
+
+   ```sh
+   npx prisma db push
+   ```
+
+4. Start the dev server and open http://localhost:3000:
+
+   ```sh
+   npm run dev
+   ```
+
+There is no sign-up page. Sign-in uses email and password, so create users directly in the `users` collection with a bcrypt-hashed `password`, a `name`, an `imageUrl`, and `isOrg` set to `true` for organization accounts.
+
+## License
+
+No license has been chosen; all rights are reserved by the contributors.
